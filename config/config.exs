@@ -10,6 +10,13 @@ import Config
 config :marvel_gateway,
   ecto_repos: [MarvelGateway.Repo]
 
+# Marvel API Credentials
+config :marvel_gateway, :developer_portal,
+  public_key: "5f3ca374aec85caae447eff6ff94fed3",
+  private_key: "f10bc178862ee730c312491f165d4cc36d22d77c",
+  base_url: "https://gateway.marvel.com",
+  api_namespace: "v1/public"
+
 # Configures the endpoint
 config :marvel_gateway, MarvelGatewayWeb.Endpoint,
   url: [host: "localhost"],

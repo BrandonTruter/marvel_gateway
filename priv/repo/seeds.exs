@@ -1,11 +1,7 @@
-# Script for populating the database. You can run it as:
-#
-#     mix run priv/repo/seeds.exs
-#
-# Inside the script, you can read and write to any of your
-# repositories directly:
-#
-#     MarvelGateway.Repo.insert!(%MarvelGateway.SomeSchema{})
-#
-# We recommend using the bang functions (`insert!`, `update!`
-# and so on) as they will fail if something goes wrong.
+{:ok, _character} = %{
+  description: "first testing hero",
+  attribution_text: "marvel inc",
+  name: "Tester",
+  etag: "abc",
+  hero_id: 0
+} |> MarvelGateway.Heroes.create_character()

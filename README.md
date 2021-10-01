@@ -1,5 +1,7 @@
 # MarvelGateway
 
+Elixir gateway API-only app for processing requests based on MarvelAPI integration, includes API authentication & DB transactions.
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
@@ -17,4 +19,3 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Docs: https://hexdocs.pm/phoenix
   * Forum: https://elixirforum.com/c/phoenix-forum
   * Source: https://github.com/phoenixframework/phoenix
-# marvel_gateway
