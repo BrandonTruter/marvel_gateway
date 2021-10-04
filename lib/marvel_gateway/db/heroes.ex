@@ -35,7 +35,14 @@ defmodule MarvelGateway.Heroes do
       ** (Ecto.NoResultsError)
 
   """
-  def get_character!(id), do: Repo.get!(Character, id)
+  def get_character(id) do
+    from(c in Character, where: c.hero_id == ^id)
+      |> Repo.all()
+      |> List.first()
+  end
+
+  # def get_character!(id), do: Repo.get!(Character, id)
+  # def get_character(id), do: Repo.get(Character, id)
 
   @doc """
   Creates a character.

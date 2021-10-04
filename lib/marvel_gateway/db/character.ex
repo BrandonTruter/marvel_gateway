@@ -18,6 +18,6 @@ defmodule MarvelGateway.Heroes.Character do
   def changeset(character, attrs) do
     character
     |> cast(attrs, [:name, :description, :etag, :hero_id, :image_location, :image_format, :attribution_text])
-    |> validate_required([:name, :description, :hero_id, :attribution_text])
+    |> validate_required([:name, :hero_id, :attribution_text])
   end
 end
