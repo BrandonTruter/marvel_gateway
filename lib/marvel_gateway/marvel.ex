@@ -7,14 +7,18 @@ defmodule MarvelGateway.Marvel do
   end
 
   def find_character(id) do
-    marvel_api_request("characters", :get, id)
+    marvel_api_request("characters/#{id}")
   end
 
-  def marvel_api_request(endpoint \\ "characters", method \\ :get, params \\ "") do
+  def find_series(id) do
+    marvel_api_request("characters/#{id}/series", :series)
+  end
+
+  def marvel_api_request(endpoint \\ "characters", entity \\ :characters, method \\ :get, params \\ "") do
     try do
       ts = timestamp()
-      url = build_url(endpoint, params)
-      query_string = build_query_string(ts)
+      url = build_url(endpoint)
+      query_string = build_query_string(entity, ts)
 
       case ApiRequest.request("#{url}?#{query_string}", method, headers(), "") do
         {200, response} ->
@@ -30,26 +34,31 @@ defmodule MarvelGateway.Marvel do
     end
   end
 
-  defp build_url(endpoint, params) do
-    case params do
-      "" -> "#{base_url()}/#{endpoint}"
-
-      character_id ->
-        base_url() <> "/#{endpoint}" <> "/#{character_id}"
-    end
+  defp build_url(endpoint) do
+    base_url() <> "/" <> endpoint
   end
 
-  def build_query_string(ts) do
-    credentials(ts, fetch_keys("private_key"), fetch_keys("public_key")) |> URI.encode_query
+  def build_query_string(entity, ts) do
+    credentials(entity, ts, fetch_keys("private_key"), fetch_keys("public_key")) |> URI.encode_query
   end
 
   defp timestamp(), do: DateTime.utc_now |> DateTime.to_string
 
-  def credentials(ts, pvt_key, pub_key) do
+  def credentials(:characters, ts, pvt_key, pub_key) do
     %{
       ts: ts,
       apikey: pub_key,
       hash: hash(ts, pvt_key, pub_key)
+    }
+  end
+
+  def credentials(:series, ts, pvt_key, pub_key) do
+    %{
+      ts: ts,
+      apikey: pub_key,
+      hash: hash(ts, pvt_key, pub_key),
+      orderBy: "title",
+      limit: 60
     }
   end
 
@@ -110,6 +119,29 @@ defmodule MarvelGateway.Marvel do
             image_format: character["thumbnail"]["extension"],
             image_location: character["thumbnail"]["path"]
           }
+        end
+      {:error, errors} -> nil
+    end
+  end
+
+  def parse_series(response) do
+    case response do
+      {:ok, response} ->
+        valid_response? = if response["code"] == 200, do: true, else: false
+
+        if valid_response? do
+          response["data"]["results"]
+            |> Enum.filter(fn s ->  s["stories"]["available"] > 9 end)
+            |> Enum.map(fn series ->
+              %{
+                title: series["title"],
+                etag: response["etag"],
+                character_id: series["id"],
+                thumbnail: series["thumbnail"],
+                description: series["description"],
+                story_count: series["stories"]["available"]
+              }
+            end)
         end
       {:error, errors} -> nil
     end
