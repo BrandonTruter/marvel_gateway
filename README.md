@@ -4,11 +4,21 @@ Elixir micro-service app for processing requests based on MarvelAPI integration,
 
 ### Dependencies
 
-  * Make sure you have `Erlang` and `Elixir` installed:
+  * Make sure you have `Erlang`, `Elixir` and `Phoenix` installed, compatible versions:
     - Erlang >= v20
     - Elixir >= 1.10
 
 ### Getting Started
+
+  * Install system dependencies
+
+    ```
+    $ asdf install erlang 24.0
+    $ asdf install elixir 1.12.3
+    $ asdf global erlang 24.0
+    $ asdf global elixir 1.12.3
+    $ mix archive.install hex phx_new
+    ```
 
   * Setup the repository
 

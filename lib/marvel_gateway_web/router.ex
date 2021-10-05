@@ -13,8 +13,8 @@ defmodule MarvelGatewayWeb.Router do
     pipe_through [:api, :auth]
 
     scope "/v1" do
-      resources("/characters", CharacterController, only: [:show, :index, :delete]
-      resources "/series", SeriesController, only: [:show, :delete]
+      resources("/characters", CharacterController, only: [:show, :index, :delete])
+      resources("/series", SeriesController, only: [:show, :delete])
     end
   end
 end
